@@ -263,7 +263,7 @@ alias -l processcommand {
   if (%ctok == 3) { opcommand enable $2- }
   if (%ctok == 4) { opcommand $2- }
   if (($getset(status,bot) == 0) || ($trivia.banned)) { return }
-  if (%ctok == 5) { if (!$isdis(28)) { $iif($nick isowner $chan,trivia $2-,goto end)) | :end } }
+  if (%ctok == 5) { if (!$isdis(28)) { trivia $2- } }
   if (%ctok == 6) { if ((!$isdis(29)) && ($trivia.on) && ((!$team) || ($nick isop $iden))) { strivia $iden $nick } }
   if (%ctok == 8) { if (!$isdis(5)) { trivia.pause 1 } }
   if (%ctok == 7) { if ((!$trivia.paused) && (!$isdis(5))) { trivia.pause } }
