@@ -1404,7 +1404,7 @@ alias rdc {
 ;########################################################
 ;# AWARD setups.                                        #
 ;########################################################
-alias -l msg.trivia.award { msg $iden %c2 $+ $replace($eval($1,2),^, %c2o $+ $e1($2) $+ %c2,*, %c2o $+ $e1($nick) $+ %c2) $+ %c2o }
+alias -l msg.trivia.award { raw -q privmsg $iden $nick : %c2 $+ $replace($eval($1,2),^, %c2o $+ $e1($2) $+ %c2,*, %c2o $+ $e1($replace($nick,>,Guest_)) $+ %c2) $+ %c2o }
 alias -l award {
   if ($getset(status,noawards)) { return }
   var %i = 1, %award = $calc($findtok($award.on.tok, $1, 1, $asc(.)) - 1), %trigger = $2-
@@ -1571,7 +1571,7 @@ alias transfile { return " $+ $triv(translate) $+ " }
 ;# MESSAGES.                                            #
 ;########################################################
 alias -l msg.ping.reply { return $e1($nick) $+ $e2($chr(44) your ping is) $e1($calc(($ticks - % [ $+ ping. [ $+ [ $nick ] ] ] ) / 1000)) $e2(secs.) }
-alias -l msg.answer.correct { return $iif($1,$msg.answer.correct2($2,$3,$4),$e2(Winner:) $e1($getmrank($nick) $nick) $iif(!$getset(status,shownone),$e2(Answer:) $e1($trivq.answer)) $iif(!$getset(hide,time),$e2(Time:) $e1($thget(Time))) $iif(!$getset(hide,streak),$e2(Streak:) $e1($getset(Var $+ $idenn, Row))) $iif(!$getset(hide,score),$e2(Points:) $e1($user.score($nick))) $iif(!$getset(hide,wpm),$e2(WPM:) $e1($int($2))) $iif(!$getset(hide,score),$e2(Rank:) $e1($tranord($3)) $iif($4,$e2(Previously:) $e1($tranord($4))))) }
+alias -l msg.answer.correct { return $iif($1,$msg.answer.correct2($2,$3,$4),$e2(Winner:) $e1($getmrank($nick) $replace($nick,>,Guest_)) $iif(!$getset(status,shownone),$e2(Answer:) $e1($trivq.answer)) $iif(!$getset(hide,time),$e2(Time:) $e1($thget(Time))) $iif(!$getset(hide,streak),$e2(Streak:) $e1($getset(Var $+ $idenn, Row))) $iif(!$getset(hide,score),$e2(Points:) $e1($user.score($nick))) $iif(!$getset(hide,wpm),$e2(WPM:) $e1($int($2))) $iif(!$getset(hide,score),$e2(Rank:) $e1($tranord($3)) $iif($4,$e2(Previously:) $e1($tranord($4))))) }
 alias -l msg.answer.correct2 { return $e1($getmrank($nick) $nick) $e2(got the answer) $+ $iif(!$getset(status,shownone),$e2(:) $e1($trivq.answer),$e2(.)) $iif(!$getset(hide,time),$e2(in) $e1($thget(Time)) $e2(seconds.)) $iif(!$getset(hide,score),$e2(Points:) $e1($user.score($nick))) $e2(Rank:) $e1($tranord($2)) }
 alias -l msg.answer.timeout { return $e2(Time's up! The answer was:) $e1($trivq.answer) }
 alias -l msg.answer.timeout.total { return $e2(Time's up! Remaining answers were:) $e1($left($gettotalremain,850)) }
