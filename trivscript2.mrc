@@ -263,7 +263,7 @@ alias -l processcommand {
   if (%ctok == 3) { opcommand enable $2- }
   if (%ctok == 4) { opcommand $2- }
   if (($getset(status,bot) == 0) || ($trivia.banned)) { return }
-  if (%ctok == 5) { if (!$isdis(28)) { trivia $2- } }
+  if (%ctok == 5) { if (!$isdis(28)) { $iif($nick isowner $chan,trivia $2-,goto end)) | :end } }
   if (%ctok == 6) { if ((!$isdis(29)) && ($trivia.on) && ((!$team) || ($nick isop $iden))) { strivia $iden $nick } }
   if (%ctok == 8) { if (!$isdis(5)) { trivia.pause 1 } }
   if (%ctok == 7) { if ((!$trivia.paused) && (!$isdis(5))) { trivia.pause } }
@@ -1404,7 +1404,7 @@ alias rdc {
 ;########################################################
 ;# AWARD setups.                                        #
 ;########################################################
-alias -l msg.trivia.award { return %c2 $+ $replace($eval($1,2),^, %c2o $+ $e1($2) $+ %c2,*, %c2o $+ $e1($nick) $+ %c2) $+ %c2o }
+alias -l msg.trivia.award { msg $iden %c2 $+ $replace($eval($1,2),^, %c2o $+ $e1($2) $+ %c2,*, %c2o $+ $e1($nick) $+ %c2) $+ %c2o }
 alias -l award {
   if ($getset(status,noawards)) { return }
   var %i = 1, %award = $calc($findtok($award.on.tok, $1, 1, $asc(.)) - 1), %trigger = $2-
@@ -1418,16 +1418,16 @@ alias -l award {
 }
 alias award.act {
   var %do
-  if ($1 == 1) { var %do = tact $msg.trivia.award($3,$2) }
+  if ($1 == 1) { var %do = inform $msg.trivia.award($3,$2) }
   if (($1 == 2) || ($1 == 5)) { var %do = tsay $msg.trivia.award($3,$2) }
-  if ($1 == 3) { var %do = notice $nick $msg.trivia.award($3,$2) }
+  if ($1 == 3) { var %do = .notice $msg.trivia.award($3,$2) }
   if ($1 == 4) { var %do = trivia.credit $nick $3 }
   if ($1 == 5) { var %do = tban $nick }
   if ($1 == 6) { var %do = $eval($replace($3-,*,$2),3) }
   .timer 1 0 schan $chan %do
 }
 alias schan {
-  set -u3 %ident $1
+  set -u10 %ident $1
   $2-
 }
 alias award.on.tok { return Null.Score.Row.Time.WPM.Join.Question.Uprank.Promotion.Answered.RoundStart.RoundStop.Command.NoAnswer.Hint.HTMLUpdate.Champ.TeamVictory.TeamAnswered }
